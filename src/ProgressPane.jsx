@@ -179,8 +179,8 @@ function EntryInfo({ entry, isLatest }) {
                 <tr>
                     <td width="200">Matched</td>
                     <td className="thin align-right">
-                        {Math.round((entry.matchingBytes / entry.totalBytes) * 10000) / 100}%
-                        ({entry.matchingFuncs}/{entry.totalFuncs} functions)
+                        {Math.round((entry.matchingBytes / entry.totalBytes) * 10000) / 100}% bytes
+                        ({entry.matchingFuncs}/{entry.totalFuncs} split functions)
                     </td>
                 </tr>
             </tbody>
