@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
-import { Area, XAxis, YAxis, AreaChart, CartesianGrid, Tooltip } from "recharts"
-import useDimensions from "use-element-dimensions"
+import { Area, XAxis, YAxis, AreaChart, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import { scalePow } from "d3-scale"
+
+const scale = scalePow()
+    .exponent(30)
 
 const csvVersions = {
     "1": {
@@ -38,37 +41,41 @@ async function fetchData() {
         })
 }
 
-export default function ProgressPane({ captionPortal }) {
-    const [data, setData] = useState(null)
+let cachedData = null
+
+export default function ProgressPane({ captionPortal, nonce }) {
+    const [data, setData] = useState(cachedData)
 
     useEffect(() => {
         fetchData()
-            .then(data => setData(data))
+            .then(data => {
+                cachedData = data
+                setData(cachedData)
+            })
     }, [])
 
     // TODO: cute spin animation when data loads
 
     return <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-        {data && <DataView data={data} captionPortal={captionPortal}/>}
+        {data && <DataView data={data} nonce={nonce} captionPortal={captionPortal}/>}
         {!data && "Loading..."}
     </div>
 }
 
-const MONTH = 2678400
+const monthDates = []
+{
+    let date = new Date(2020, 3, 1)
+    while (date < Date.now()) {
+        monthDates.push(date / 1000)
 
-function DataView({ data, captionPortal }) {
-    const [chartDimensions, chartRef] = useDimensions()
+        date = new Date(date) // clone
+        date.setMonth(date.getMonth() + 1)
+    }
+}
+
+function DataView({ data, captionPortal, nonce }) {
     const latest = data[data.length - 1]
     const oldest = data[0]
-
-    let monthDates = []
-    for (let i = new Date(1583020800000); i < new Date(latest.timestamp); i.setMonth(i.getMonth() + 1)) {
-        if (i > new Date(oldest.timestamp)) {
-            monthDates.push(i)
-        }
-    }
-
-    console.log(monthDates)
 
     const [selectedEntry, setSelectedEntry] = useState(null)
 
@@ -79,6 +86,8 @@ function DataView({ data, captionPortal }) {
 
         return <span/>
     }
+
+    const maxPercent = Math.ceil(latest.percentBytes / 25) * 25
 
     return <>
         <table width="250" className="outline-invert">
@@ -92,30 +101,32 @@ function DataView({ data, captionPortal }) {
 
         <div className="shadow-box flex-grow">
             <div className="shadow-box-inner" style={{ paddingRight: ".7em", paddingTop: ".7em", "--text-outline": "transparent" }}>
-                <div className="progress-chart" ref={chartRef}>
-                    {chartDimensions.width > 0 && <AreaChart width={chartDimensions.width} height={chartDimensions.height} data={data}>
-                        <XAxis dataKey="timestamp" type="number" scale="time" domain={["dataMin", "dataMax"]} ticks={monthDates} tickFormatter={formatDate}/>
-                        <YAxis type="number" unit="%" domain={[0, 100]} tickCount={11}/>
+                <div className="progress-chart">
+                    <ResponsiveContainer>
+                        <AreaChart data={data}>
+                            <XAxis dataKey="timestamp" type="number" scale={scale} domain={["dataMin", "dataMax"]} ticks={monthDates} tickFormatter={formatTimestampMonth} interval={0}/>
+                            <YAxis type="number" unit="%" domain={[0, maxPercent]} tickCount={maxPercent / 5 + 1}/>
 
-                        <CartesianGrid stroke="#eee" horizontalPoints={monthDates}/>
+                            <CartesianGrid stroke="#eee"/>
 
-                        <Area
-                            type="linear"
-                            dataKey="percentBytes"
-                            unit="%"
-                            stroke="#e3ac34" strokeWidth={2}
-                            fill="#edc97e"
-                            dot={true}
-                            isAnimationActive={false}
-                        />
+                            <Area
+                                type="linear"
+                                dataKey="percentBytes"
+                                unit="%"
+                                stroke="#e3ac34" strokeWidth={2}
+                                fill="#edc97e"
+                                dot={true}
+                                isAnimationActive={false}
+                            />
 
-                        <Tooltip content={renderTooltip}/>
-                    </AreaChart>}
+                            <Tooltip content={renderTooltip}/>
+                        </AreaChart>
+                    </ResponsiveContainer>
                 </div>
             </div>
 
             <button className="shadow-box-title yellow">
-                {selectedEntry ? formatDate(selectedEntry.timestamp, {
+                {selectedEntry ? formatTimestamp(selectedEntry.timestamp, {
                     dateStyle: "long",
                     timeStyle: "short",
                 }) : ""}
@@ -126,10 +137,23 @@ function DataView({ data, captionPortal }) {
     </>
 }
 
-function formatDate(timestamp, options={}) {
+function formatTimestamp(timestamp, options={}) {
     const date = new Date(timestamp * 1000)
 
     return new Intl.DateTimeFormat([], options).format(date)
+}
+
+function formatTimestampMonth(timestamp) {
+    const date = new Date(timestamp * 1000)
+    const [day, month, year] = new Intl.DateTimeFormat("en-GB", {
+        dateStyle: "medium",
+    }).format(date).split(" ")
+
+    if (month === "Jan") {
+        return year
+    }
+
+    return month
 }
 
 function EntryInfo({ entry }) {

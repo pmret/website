@@ -27,9 +27,7 @@ function App() {
     const [tabIndex, setTabIndex] = useState(routedTabIndex)
     const [rotation, setRotation] = useState(0)
     const [flip, setFlip] = useState(false)
-
     const pane = useRef()
-    let lockTabs = false // not state
 
     function switchToTab(index) {
         if (index === paneIndex || index === tabIndex) return
@@ -65,9 +63,6 @@ function App() {
                     key={tab.name}
                     className={clsx("tab", tab.color, { "inactive": index !== tabIndex })}
                     onClick={() => {
-                        if (lockTabs) return
-                        lockTabs = true
-
                         switchToTab(index)
                     }}
                 >
@@ -84,10 +79,10 @@ function App() {
                 transform: `rotateX(${flip ? '180deg' : '0deg'})`,
                 overflow: "hidden",
             }}>
-                {tabs[paneIndex].pane({ captionPortal })}
+                {tabs[paneIndex].pane({ captionPortal, nonce: rotation })}
             </div>
         </main>
-        <div class="caption outline-invert" ref={captionPortal}></div>
+        <div className="caption outline-invert" ref={captionPortal}></div>
     </>
 }
 
