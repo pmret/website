@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 import clsx from "clsx"
 
 import ProgressPane from "./ProgressPane"
+import Contributors from "./Contributors"
 
 const tabs = [
     {
@@ -20,6 +21,12 @@ const tabs = [
         name: "Progress",
         color: "yellow",
         pane: (props) => <ProgressPane {...props}/>
+    },
+    {
+        slug: "/party",
+        name: "Party",
+        color: "teal",
+        pane: (props) => <Contributors {...props}/>
     },
 ]
 

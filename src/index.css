@@ -7,7 +7,7 @@ html {
     --dark: #313131;
     --light: #d6d6ce;
 
-    font-size: 28px;
+    font-size: 32px;
     font-family: "Paper Mario Dialog Redesigned", sans-serif;
     font-weight: 700;
     line-height: 1.2;
@@ -15,7 +15,7 @@ html {
     color: var(--light);
     --text-outline: var(--dark);
 
-    background: #090942; /* TODO: dynamic star bg */
+    background: rgb(51 51 53); /* TODO: dynamic star bg */
 
     overflow: hidden;
 }
@@ -25,6 +25,10 @@ html {
 
     /* https://owumaro.github.io/text-stroke-generator/ */
     text-shadow: var(--text-outline) 3px 0px 0px, var(--text-outline) 2.83487px 0.981584px 0px, var(--text-outline) 2.35766px 1.85511px 0px, var(--text-outline) 1.62091px 2.52441px 0px, var(--text-outline) 0.705713px 2.91581px 0px, var(--text-outline) -0.287171px 2.98622px 0px, var(--text-outline) -1.24844px 2.72789px 0px, var(--text-outline) -2.07227px 2.16926px 0px, var(--text-outline) -2.66798px 1.37182px 0px, var(--text-outline) -2.96998px 0.42336px 0px, var(--text-outline) -2.94502px -0.571704px 0px, var(--text-outline) -2.59586px -1.50383px 0px, var(--text-outline) -1.96093px -2.27041px 0px, var(--text-outline) -1.11013px -2.78704px 0px, var(--text-outline) -0.137119px -2.99686px 0px, var(--text-outline) 0.850987px -2.87677px 0px, var(--text-outline) 1.74541px -2.43999px 0px, var(--text-outline) 2.44769px -1.73459px 0px, var(--text-outline) 2.88051px -0.838247px 0px;
+}
+
+p {
+    margin: 0;
 }
 
 a:any-link {
@@ -38,7 +42,6 @@ button {
 
     border-radius: 100em;
     padding: 0 .4em .2em .4em;
-    cursor: pointer;
 
     filter: brightness(1.0);
     will-change: filter, box-shadow;
@@ -50,6 +53,9 @@ button {
     border-right: 2px solid;
 
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+    user-select: none;
+    text-align: center;
 }
 
 button.red {
@@ -84,6 +90,14 @@ button.github {
     border-right-color: #171515;
 }
 
+button.teal {
+    border-top-color: #22eec9;
+    border-left-color: #22eec9;
+    background: #14a98e;
+    border-bottom-color: #076d5a;
+    border-right-color: #076d5a;
+}
+
 button.inactive {
     filter: brightness(0.6);
 }
@@ -95,6 +109,7 @@ button:hover {
 
 .tab {
     margin-right: .25em;
+    cursor: pointer;
 }
 
 #container {
@@ -108,11 +123,10 @@ button:hover {
     flex-direction: column;
     align-items: center;
 
-    width: 1400px;
-    max-width: calc(100vw - 10vh);
-
-    height: 1200px;
-    max-height: calc(100vh - 10vw);
+    width: 1600px;
+    max-width: 95%;
+    height: 1100px;
+    max-height: 950%;
 }
 
 nav {
@@ -137,6 +151,7 @@ main {
     border-radius: 1rem;
 
     padding: 1em;
+    padding-bottom: 2.5em;
 
     overflow-y: auto;
 
@@ -156,6 +171,11 @@ main.red {
 main.yellow {
     background-color: #e2d8b3;
     background-image: url(bg/yellow-checker.png);
+}
+
+main.teal {
+    background-color: #cad9d6;
+    background-image: url(bg/teal-checker.png);
 }
 
 main > * {
@@ -235,10 +255,10 @@ button.shadow-box-title {
 
     border-radius: 1rem;
     width: 85%;
-    height: 3rem;
+    height: 4rem;
 
-    padding: 8px 16px;
-    margin-top: -14px;
+    padding: .5em 1em;
+    margin-top: -2em;
     z-index: 1;
 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -247,7 +267,7 @@ button.shadow-box-title {
 .progress-chart {
     flex: 1;
 
-    font-size: 12px;
+    font-size: 18px;
     overflow: hidden;
 
     user-select: none;
@@ -269,3 +289,34 @@ button.shadow-box-title {
 .flex-spacer { width: 1em; height: 1em }
 
 .align-right { text-align: right }
+
+.avatars {
+    position: relative;
+
+    width: 400px;
+    height: 400px;
+
+    margin-bottom: 2em;
+}
+
+.avatar {
+    border-radius: 100em;
+
+    position: absolute;
+    will-change: filter, top, left;
+    transition: 200ms filter, 200ms top, 200ms left;
+
+    cursor: pointer;
+
+    width: 5em;
+    height: 5em;
+    transform: translate(-50%, -50%);
+}
+
+.avatar.inactive {
+    filter: brightness(0.7) saturate(0.7);
+}
+
+.avatar:hover {
+    filter: brightness(1.0);
+}
