@@ -102,14 +102,14 @@ function DataView({ data, captionPortal, nonce }) {
         </table>*/}
 
         <div className="shadow-box flex-grow">
-            <div className="shadow-box-inner" style={{ paddingRight: ".7em", paddingTop: ".7em", "--text-outline": "transparent" }}>
+            <div className="shadow-box-inner" style={{ paddingRight: ".7em", paddingTop: ".7em", "--text-outline": "transparent", background: "#e2e1d8" }}>
                 <div className="progress-chart">
                     <ResponsiveContainer>
                         <AreaChart data={data}>
                             <XAxis dataKey="timestamp" type="number" scale={scale} domain={["dataMin", Date.now()/1000]} ticks={monthDates} tickFormatter={formatTimestampMonth} interval={0}/>
                             <YAxis type="number" unit="%" domain={[0, maxPercent]} tickCount={maxPercent / 5 + 1}/>
 
-                            <CartesianGrid stroke="#eee"/>
+                            <CartesianGrid stroke="#d9d0c9"/>
 
                             <Area
                                 type="linear"
