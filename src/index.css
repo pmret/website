@@ -1,0 +1,214 @@
+@font-face {
+    font-family: "Paper Mario Dialog Redesigned";
+    src: url("pmdialog2.woff2") format("woff2");
+}
+
+html {
+    --dark: #313131;
+    --light: #d6d6ce;
+
+    font-size: 28px;
+    font-family: "Paper Mario Dialog Redesigned", sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+
+    color: var(--light);
+    --text-outline: var(--dark);
+
+    background: #090942; /* TODO: dynamic star bg */
+
+    overflow: hidden;
+}
+
+* {
+    box-sizing: border-box;
+
+    /* https://owumaro.github.io/text-stroke-generator/ */
+    text-shadow: var(--text-outline) 3px 0px 0px, var(--text-outline) 2.83487px 0.981584px 0px, var(--text-outline) 2.35766px 1.85511px 0px, var(--text-outline) 1.62091px 2.52441px 0px, var(--text-outline) 0.705713px 2.91581px 0px, var(--text-outline) -0.287171px 2.98622px 0px, var(--text-outline) -1.24844px 2.72789px 0px, var(--text-outline) -2.07227px 2.16926px 0px, var(--text-outline) -2.66798px 1.37182px 0px, var(--text-outline) -2.96998px 0.42336px 0px, var(--text-outline) -2.94502px -0.571704px 0px, var(--text-outline) -2.59586px -1.50383px 0px, var(--text-outline) -1.96093px -2.27041px 0px, var(--text-outline) -1.11013px -2.78704px 0px, var(--text-outline) -0.137119px -2.99686px 0px, var(--text-outline) 0.850987px -2.87677px 0px, var(--text-outline) 1.74541px -2.43999px 0px, var(--text-outline) 2.44769px -1.73459px 0px, var(--text-outline) 2.88051px -0.838247px 0px;
+}
+
+a:any-link {
+    color: #3796ff;
+    --text-outline: #d3e5f9;
+    text-decoration: none;
+}
+
+button {
+    all: unset;
+
+    border-radius: 100em;
+    padding: 0 .3em .2em .3em;
+    cursor: pointer;
+
+    filter: brightness(1.0);
+    will-change: filter;
+    transition: filter 200ms;
+}
+
+button.red {
+    background: linear-gradient(#f04e54, #f04e54 10%, #b4313e 25%, #b4313e 90%, #7f1729 95%);
+}
+
+button.yellow {
+    background: linear-gradient(#f0c74e, #f0c74e 10%, #b48b31 25%, #b48b31 90%, #7f5617 95%);
+}
+
+button.inactive {
+    filter: brightness(0.6);
+}
+
+button:hover {
+    filter: brightness(1.0);
+}
+
+.tab {
+    margin-right: .25em;
+}
+
+#container {
+    /* TODO: use flex on body */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 1400px;
+    max-width: calc(100vw - 10vh);
+
+    height: 1200px;
+    max-height: calc(100vh - 10vw);
+}
+
+nav {
+    margin-bottom: -.6em;
+    z-index: 1;
+}
+
+main {
+    flex: 1;
+    width: 100%;
+
+    background-repeat: repeat;
+    background-size: 32px;
+    background-position: center;
+    image-rendering: pixelated;
+
+    border-radius: 1rem;
+
+    padding: 1em;
+
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    transition: 600ms transform ease-in-out;
+}
+
+main.red {
+    background-color: #e2b6b3;
+    background-image: url(bg/red-checker.png);
+}
+
+main.yellow {
+    background-color: #e2d8b3;
+    background-image: url(bg/yellow-checker.png);
+}
+
+main > * {
+    image-rendering: initial;
+}
+
+.shadow-box {
+    background: #ffffff66;
+    padding: 1em;
+    margin: .5em;
+    margin-bottom: 1em;
+
+    border-radius: 16px;
+    box-shadow: .5em .5em 3px -.2em #00000044;
+
+    border-top: 4px solid #ffffff33;
+    padding-top: calc(1em - 2px);
+
+    border-left: 2px solid #ffffff33;
+    border-right: 2px solid #00000055;
+    border-bottom: 2px solid #00000055;
+
+    position: relative;
+}
+
+.shadow-box-inner {
+    border-radius: 12px;
+    box-shadow: inset .3em .3em 3px #00000033;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    overflow: hidden;
+
+    background: white;
+}
+
+button.shadow-box-title {
+    position: absolute;
+    left: 50%;
+    bottom: -1em;
+    transform: translateX(-50%);
+
+    width: 60%;
+
+    text-align: center;
+
+    border-radius: 1em;
+
+    padding-top: .2em;
+    height: 1.2em;
+}
+
+.caption {
+    background-image: url(bg/caption-checker.png);
+    background-repeat: repeat;
+    background-size: 32px;
+    background-position: center;
+    image-rendering: pixelated;
+
+    border-radius: 1rem;
+    width: 85%;
+    height: 3rem;
+
+    padding: 8px 16px;
+    margin-top: -14px;
+    z-index: 1;
+}
+
+.progress-chart {
+    flex: 1;
+
+    font-size: 12px;
+    overflow: hidden;
+
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.outline-invert {
+    color: var(--dark);
+    --text-outline: var(--light);
+}
+
+.thin {
+    font-weight: 400;
+    text-shadow: var(--text-outline) 2px 0px 0px, var(--text-outline) 1.75517px 0.958851px 0px, var(--text-outline) 1.0806px 1.68294px 0px, var(--text-outline) 0.141474px 1.99499px 0px, var(--text-outline) -0.832294px 1.81859px 0px, var(--text-outline) -1.60229px 1.19694px 0px, var(--text-outline) -1.97998px 0.28224px 0px, var(--text-outline) -1.87291px -0.701566px 0px, var(--text-outline) -1.30729px -1.5136px 0px, var(--text-outline) -0.421592px -1.95506px 0px, var(--text-outline) 0.567324px -1.91785px 0px, var(--text-outline) 1.41734px -1.41108px 0px, var(--text-outline) 1.92034px -0.558831px 0px;
+}
+
+.flex-row { display: flex; flex-direction: row }
+.flex-grow { flex: 1; height: 0 }
+.flex-spacer { width: 1em; height: 1em }
+
+.align-right { text-align: right }
