@@ -9,7 +9,11 @@ const tabs = [
         slug: "/",
         name: "Info",
         color: "red",
-        pane: () => <div>I am the info page</div>,
+        pane: () => <div>
+            <p className="outline-invert">
+                Welcome to the Paper Mario Reverse-Engineering website!
+            </p>
+        </div>,
     },
     {
         slug: "/progress",
@@ -69,6 +73,12 @@ function App() {
                     {tab.name}
                 </button>
             })}
+            <button className="tab blurple inactive" onClick={() => window.open("https://discord.gg/urUm3VG")}>
+                Discord
+            </button>
+            <button className="tab github inactive" onClick={() => window.open("https://github.com/pmret/papermario")}>
+                GitHub
+            </button>
         </nav>
         <main id="main" ref={pane} className={clsx(tabs[paneIndex].color)} style={{
             transform: `perspective(4000px) rotateX(${rotation}deg)`,
@@ -77,7 +87,6 @@ function App() {
                 display: "flex",
                 flex: 1,
                 transform: `rotateX(${flip ? '180deg' : '0deg'})`,
-                overflow: "hidden",
             }}>
                 {tabs[paneIndex].pane({ captionPortal, nonce: rotation })}
             </div>

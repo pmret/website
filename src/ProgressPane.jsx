@@ -77,12 +77,14 @@ function DataView({ data, captionPortal, nonce }) {
     const latest = data[data.length - 1]
     const oldest = data[0]
 
-    const [selectedEntry, setSelectedEntry] = useState(null)
+    const [selectedEntry, setSelectedEntry] = useState(latest)
 
     function renderTooltip(tip) {
         const entry = data.find(row => row.timestamp === tip.label)
 
-        setSelectedEntry(entry)
+        if (entry) {
+            setSelectedEntry(entry)
+        }
 
         return <span/>
     }
@@ -90,21 +92,21 @@ function DataView({ data, captionPortal, nonce }) {
     const maxPercent = Math.ceil(latest.percentBytes / 25) * 25
 
     return <>
-        <table width="250" className="outline-invert">
+        {/*<table width="250" className="outline-invert">
             <tbody>
                 <tr>
                     <td>Matched</td>
                     <td className="thin align-right">{Math.round((latest.matchingBytes / latest.totalBytes) * 10000) / 100}%</td>
                 </tr>
             </tbody>
-        </table>
+        </table>*/}
 
         <div className="shadow-box flex-grow">
             <div className="shadow-box-inner" style={{ paddingRight: ".7em", paddingTop: ".7em", "--text-outline": "transparent" }}>
                 <div className="progress-chart">
                     <ResponsiveContainer>
                         <AreaChart data={data}>
-                            <XAxis dataKey="timestamp" type="number" scale={scale} domain={["dataMin", "dataMax"]} ticks={monthDates} tickFormatter={formatTimestampMonth} interval={0}/>
+                            <XAxis dataKey="timestamp" type="number" scale={scale} domain={["dataMin", Date.now()/1000]} ticks={monthDates} tickFormatter={formatTimestampMonth} interval={0}/>
                             <YAxis type="number" unit="%" domain={[0, maxPercent]} tickCount={maxPercent / 5 + 1}/>
 
                             <CartesianGrid stroke="#eee"/>
@@ -133,7 +135,7 @@ function DataView({ data, captionPortal, nonce }) {
             </button>
         </div>
 
-        {selectedEntry && captionPortal.current && createPortal(<EntryInfo entry={selectedEntry}/>, captionPortal.current)}
+        {selectedEntry && captionPortal.current && createPortal(<EntryInfo entry={selectedEntry} isLatest={selectedEntry.commit === latest.commit}/>, captionPortal.current)}
     </>
 }
 
@@ -156,7 +158,7 @@ function formatTimestampMonth(timestamp) {
     return month
 }
 
-function EntryInfo({ entry }) {
+function EntryInfo({ entry, isLatest }) {
     /*const [commitMessage, setCommitMessage] = useState(null)
 
     useEffect(async () => {
@@ -171,6 +173,7 @@ function EntryInfo({ entry }) {
         <a href={`https://github.com/ethteck/papermario/commit/${entry.commit}`}>
             {entry.commit.substr(0, 8)}
         </a>
+        {isLatest && " (latest)"}
         <table>
             <tbody>
                 <tr>
