@@ -126,7 +126,7 @@ main {
     width: 100%;
 
     background-repeat: repeat;
-    background-size: 32px;
+    background-size: 48px;
     background-position: center;
 
     -ms-interpolation-mode: nearest-neighbor;
@@ -164,11 +164,18 @@ main > * {
 
 .shadow-box {
     background: #ffffff44;
+    backdrop-filter: blur(4px);
+    /*
+    background-image: url(bg/yellow-checker.png);
+    background-repeat: repeat;
+    background-size: 48px;
+    background-position: 18px 8px;
+    image-rendering: pixelated;
+    */
+
     padding: 1em;
     margin: .5em;
     margin-bottom: 1em;
-
-    backdrop-filter: blur(3px);
 
     border-radius: 16px;
     box-shadow: .4em .4em rgba(0, 0, 0, 0.15);
@@ -222,7 +229,7 @@ button.shadow-box-title {
 .caption {
     background-image: url(bg/caption-checker.png);
     background-repeat: repeat;
-    background-size: 32px;
+    background-size: 48px;
     background-position: center;
     image-rendering: pixelated;
 
