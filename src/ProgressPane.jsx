@@ -23,7 +23,7 @@ async function fetchData() {
     const csv = await fetch("https://papermar.io/reports/progress.csv")
         .then(response => response.text())
 
-    return csv
+    const rows = csv
         .split("\n")
         .filter(row => row.length)
         .map(row => {
@@ -35,10 +35,15 @@ async function fetchData() {
                 obj[key] = transform(data.shift())
             }
 
-            obj.percentBytes = Math.round((obj.matchingBytes / obj.totalBytes) * 100)
-
             return obj
         })
+
+    const latest = rows[rows.length - 1]
+    for (const row of rows) {
+         row.percentBytes = (row.matchingBytes / latest.totalBytes) * 100
+    }
+
+    return rows
 }
 
 let cachedData = null
@@ -92,15 +97,6 @@ function DataView({ data, captionPortal, nonce }) {
     const maxPercent = Math.ceil(latest.percentBytes / 25) * 25
 
     return <>
-        {/*<table width="250" className="outline-invert">
-            <tbody>
-                <tr>
-                    <td>Matched</td>
-                    <td className="thin align-right">{Math.round((latest.matchingBytes / latest.totalBytes) * 10000) / 100}%</td>
-                </tr>
-            </tbody>
-        </table>*/}
-
         <div className="shadow-box flex-grow">
             <div className="shadow-box-inner" style={{ paddingRight: ".7em", paddingTop: ".7em", "--text-outline": "transparent", background: "#e2e1d8" }}>
                 <div className="progress-chart">
@@ -162,7 +158,7 @@ function EntryInfo({ entry, isLatest }) {
     /*const [commitMessage, setCommitMessage] = useState(null)
 
     useEffect(async () => {
-        fetch(`https://api.github.com/repos/ethteck/papermario/commits/${entry.commit}`)
+        fetch(`https://api.github.com/repos/pmret/papermario/commits/${entry.commit}`)
             .then(resp => resp.json())
             .then(resp => {
                 setCommitMessage(resp.commit.message.split("\n")[0])
@@ -170,7 +166,7 @@ function EntryInfo({ entry, isLatest }) {
     }, [entry.commit])*/
 
     return <div>
-        <a href={`https://github.com/ethteck/papermario/commit/${entry.commit}`}>
+        <a href={`https://github.com/pmret/papermario/commit/${entry.commit}`}>
             {entry.commit.substr(0, 8)}
         </a>
         {isLatest && " (latest)"}
@@ -179,7 +175,7 @@ function EntryInfo({ entry, isLatest }) {
                 <tr>
                     <td width="200">Matched</td>
                     <td className="thin align-right">
-                        {Math.round((entry.matchingBytes / entry.totalBytes) * 10000) / 100}%
+                        {Math.round((entry.percentBytes) * 100) / 100}%
                         ({entry.matchingFuncs}/{entry.totalFuncs} functions)
                     </td>
                 </tr>
