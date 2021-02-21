@@ -15,7 +15,10 @@ html {
     color: var(--light);
     --text-outline: var(--dark);
 
-    background: rgb(51 51 53); /* TODO: dynamic star bg */
+    background-color: #002c02;
+    background-image: url(bg/mrn-toad-town.png);
+    background-size: cover;
+    background-repeat: no-repeat;
 
     overflow: hidden;
 }
@@ -98,6 +101,14 @@ button.teal {
     border-right-color: #076d5a;
 }
 
+button.green {
+    border-top-color: #68ff51;
+    border-left-color: #68ff51;
+    background: #47b836;
+    border-bottom-color: #2a791e;
+    border-right-color: #2a791e;
+}
+
 button.inactive {
     filter: brightness(0.6);
 }
@@ -151,7 +162,7 @@ main {
     border-radius: 1rem;
 
     padding: 1em;
-    padding-bottom: 2.5em;
+    /*padding-bottom: 2.5em;*/
 
     overflow-y: auto;
 
@@ -161,6 +172,10 @@ main {
     transition: 600ms transform ease-in-out;
 
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+}
+
+main > :last-child {
+    padding-bottom: 1.5em;
 }
 
 main.red {
@@ -176,6 +191,11 @@ main.yellow {
 main.teal {
     background-color: #cad9d6;
     background-image: url(bg/teal-checker.png);
+}
+
+main.green {
+    background-color: #68ff51;
+    background-image: url(bg/green-checker.png);
 }
 
 main > * {
@@ -251,6 +271,10 @@ button.shadow-box-title {
     background-repeat: repeat;
     background-size: 48px;
     background-position: center;
+
+    -ms-interpolation-mode: nearest-neighbor;
+    image-rendering: optimizespeed;
+    image-rendering: crisp-edges;
     image-rendering: pixelated;
 
     border-radius: 1rem;

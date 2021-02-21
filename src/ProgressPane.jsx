@@ -19,8 +19,13 @@ const csvVersions = {
     },
 }
 
-async function fetchData() {
-    const csv = await fetch("https://papermar.io/reports/progress.csv")
+const colors = {
+    yellow: { stroke: "#e3ac34", fill: "#edc97e" },
+    green: { stroke: "#40e334", fill: "#91eb7f" },
+}
+
+async function fetchData(version) {
+    const csv = await fetch(`https://papermar.io/reports/progress_${version}.csv`)
         .then(response => response.text())
 
     return csv
@@ -41,23 +46,18 @@ async function fetchData() {
         })
 }
 
-let cachedData = null
-
-export default function ProgressPane({ captionPortal, nonce }) {
-    const [data, setData] = useState(cachedData)
+export default function ProgressPane({ captionPortal, nonce, color, version }) {
+    const [data, setData] = useState([])
 
     useEffect(() => {
-        fetchData()
+        fetchData(version)
             .then(data => {
-                cachedData = data
-                setData(cachedData)
+                setData(data)
             })
-    }, [])
-
-    // TODO: cute spin animation when data loads
+    }, [version])
 
     return <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-        {data && <DataView data={data} nonce={nonce} captionPortal={captionPortal}/>}
+        {data && <DataView data={data} nonce={nonce} captionPortal={captionPortal} color={color}/>}
         {!data && "Loading..."}
     </div>
 }
@@ -73,9 +73,10 @@ const monthDates = []
     }
 }
 
-function DataView({ data, captionPortal, nonce }) {
+function DataView({ data, captionPortal, nonce, color }) {
     const latest = data[data.length - 1]
     const oldest = data[0]
+    const { stroke, fill } = colors[color]
 
     const [selectedEntry, setSelectedEntry] = useState(latest)
 
@@ -89,7 +90,7 @@ function DataView({ data, captionPortal, nonce }) {
         return <span/>
     }
 
-    const maxPercent = Math.ceil(latest.percentBytes / 25) * 25
+    const maxPercent = latest ? Math.ceil(latest.percentBytes / 25) * 25 : 25
 
     return <>
         {/*<table width="250" className="outline-invert">
@@ -115,8 +116,8 @@ function DataView({ data, captionPortal, nonce }) {
                                 type="linear"
                                 dataKey="percentBytes"
                                 unit="%"
-                                stroke="#e3ac34" strokeWidth={2}
-                                fill="#edc97e"
+                                stroke={stroke} strokeWidth={2}
+                                fill={fill}
                                 dot={true}
                                 isAnimationActive={false}
                             />
@@ -127,7 +128,7 @@ function DataView({ data, captionPortal, nonce }) {
                 </div>
             </div>
 
-            <button className="shadow-box-title yellow">
+            <button className={"shadow-box-title " + color}>
                 {selectedEntry ? formatTimestamp(selectedEntry.timestamp, {
                     dateStyle: "long",
                     timeStyle: "short",
