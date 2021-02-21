@@ -23,6 +23,27 @@ html {
     overflow: hidden;
 }
 
+body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+
+    background-image: url(bg/mrn-clouds.png);
+    background-repeat: repeat-x;
+    background-size: contain;
+    animation: clouds linear 30s infinite normal;
+}
+
+@keyframes clouds {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 100vw 0;
+    }
+}
+
 * {
     box-sizing: border-box;
 
