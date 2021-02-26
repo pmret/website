@@ -155,9 +155,9 @@ button:hover {
     flex-direction: column;
     align-items: center;
 
-    width: 1600px;
+    width: 80%;
     max-width: 95%;
-    height: 1100px;
+    height: 80%;
     max-height: 950%;
 }
 
