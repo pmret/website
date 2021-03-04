@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { Area, XAxis, YAxis, AreaChart, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { scalePow } from "d3-scale"
@@ -19,11 +19,16 @@ const csvVersions = {
     },
 }
 
-async function fetchData() {
-    const csv = await fetch("https://papermar.io/reports/progress.csv")
+const colors = {
+    yellow: { stroke: "#e3ac34", fill: "#edc97e" },
+    green: { stroke: "#40e334", fill: "#91eb7f" },
+}
+
+async function fetchData(version) {
+    const csv = await fetch(`https://papermar.io/reports/progress_${version}.csv`)
         .then(response => response.text())
 
-    return csv
+    const rows = csv
         .split("\n")
         .filter(row => row.length)
         .map(row => {
@@ -35,29 +40,29 @@ async function fetchData() {
                 obj[key] = transform(data.shift())
             }
 
-            obj.percentBytes = Math.round((obj.matchingBytes / obj.totalBytes) * 100)
-
             return obj
         })
+
+    const latest = rows[rows.length - 1]
+    for (const row of rows) {
+         row.percentBytes = (row.matchingBytes / latest.totalBytes) * 100
+    }
+
+    return rows
 }
 
-let cachedData = null
-
-export default function ProgressPane({ captionPortal, nonce }) {
-    const [data, setData] = useState(cachedData)
+export default function ProgressPane({ captionPortal, nonce, color, version }) {
+    const [data, setData] = useState([])
 
     useEffect(() => {
-        fetchData()
+        fetchData(version)
             .then(data => {
-                cachedData = data
-                setData(cachedData)
+                setData(data)
             })
-    }, [])
-
-    // TODO: cute spin animation when data loads
+    }, [version])
 
     return <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-        {data && <DataView data={data} nonce={nonce} captionPortal={captionPortal}/>}
+        {data && <DataView data={data} nonce={nonce} captionPortal={captionPortal} color={color}/>}
         {!data && "Loading..."}
     </div>
 }
@@ -73,9 +78,10 @@ const monthDates = []
     }
 }
 
-function DataView({ data, captionPortal, nonce }) {
+function DataView({ data, captionPortal, nonce, color }) {
     const latest = data[data.length - 1]
     const oldest = data[0]
+    const { stroke, fill } = colors[color]
 
     const [selectedEntry, setSelectedEntry] = useState(latest)
 
@@ -89,18 +95,9 @@ function DataView({ data, captionPortal, nonce }) {
         return <span/>
     }
 
-    const maxPercent = Math.ceil(latest.percentBytes / 25) * 25
+    const maxPercent = latest ? Math.ceil(latest.percentBytes / 25) * 25 : 25
 
     return <>
-        {/*<table width="250" className="outline-invert">
-            <tbody>
-                <tr>
-                    <td>Matched</td>
-                    <td className="thin align-right">{Math.round((latest.matchingBytes / latest.totalBytes) * 10000) / 100}%</td>
-                </tr>
-            </tbody>
-        </table>*/}
-
         <div className="shadow-box flex-grow">
             <div className="shadow-box-inner" style={{ paddingRight: ".7em", paddingTop: ".7em", "--text-outline": "transparent", background: "#e2e1d8" }}>
                 <div className="progress-chart">
@@ -115,8 +112,8 @@ function DataView({ data, captionPortal, nonce }) {
                                 type="linear"
                                 dataKey="percentBytes"
                                 unit="%"
-                                stroke="#e3ac34" strokeWidth={2}
-                                fill="#edc97e"
+                                stroke={stroke} strokeWidth={2}
+                                fill={fill}
                                 dot={true}
                                 isAnimationActive={false}
                             />
@@ -127,7 +124,7 @@ function DataView({ data, captionPortal, nonce }) {
                 </div>
             </div>
 
-            <button className="shadow-box-title yellow">
+            <button className={"shadow-box-title " + color}>
                 {selectedEntry ? formatTimestamp(selectedEntry.timestamp, {
                     dateStyle: "long",
                     timeStyle: "short",
@@ -162,7 +159,7 @@ function EntryInfo({ entry, isLatest }) {
     /*const [commitMessage, setCommitMessage] = useState(null)
 
     useEffect(async () => {
-        fetch(`https://api.github.com/repos/ethteck/papermario/commits/${entry.commit}`)
+        fetch(`https://api.github.com/repos/pmret/papermario/commits/${entry.commit}`)
             .then(resp => resp.json())
             .then(resp => {
                 setCommitMessage(resp.commit.message.split("\n")[0])
@@ -170,7 +167,7 @@ function EntryInfo({ entry, isLatest }) {
     }, [entry.commit])*/
 
     return <div>
-        <a href={`https://github.com/ethteck/papermario/commit/${entry.commit}`}>
+        <a href={`https://github.com/pmret/papermario/commit/${entry.commit}`}>
             {entry.commit.substr(0, 8)}
         </a>
         {isLatest && " (latest)"}
@@ -179,8 +176,8 @@ function EntryInfo({ entry, isLatest }) {
                 <tr>
                     <td width="200">Matched</td>
                     <td className="thin align-right">
-                        {Math.round((entry.matchingBytes / entry.totalBytes) * 10000) / 100}% bytes
-                        ({entry.matchingFuncs}/{entry.totalFuncs} split functions)
+                        {Math.round(entry.percentBytes * 100) / 100}% bytes
+                        ({entry.matchingFuncs}/{entry.totalFuncs} functions)
                     </td>
                 </tr>
             </tbody>

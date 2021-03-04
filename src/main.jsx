@@ -3,6 +3,7 @@ import ReactDOM from "react-dom"
 import clsx from "clsx"
 
 import ProgressPane from "./ProgressPane"
+import Contributors from "./Contributors"
 
 const tabs = [
     {
@@ -11,16 +12,28 @@ const tabs = [
         color: "red",
         pane: () => <div>
             <p className="outline-invert">
-                Welcome to the Paper Mario Reverse-Engineering website!
+                Welcome to the Paper Mario decompilation site!
             </p>
         </div>,
     },
     {
-        slug: "/progress",
-        name: "Progress",
+        slug: "/progress-us",
+        name: "Progress (US)",
         color: "yellow",
-        pane: (props) => <ProgressPane {...props}/>
+        pane: (props) => <ProgressPane version="us" color="yellow" {...props}/>
     },
+    {
+        slug: "/progress-jp",
+        name: "Progress (JP)",
+        color: "green",
+        pane: (props) => <ProgressPane version="jp" color="green" {...props}/>
+    },
+    /*{
+        slug: "/contributors",
+        name: "Contributors",
+        color: "teal",
+        pane: (props) => <Contributors {...props}/>
+    },*/
 ]
 
 let routedTabIndex = tabs.findIndex(tab => tab.slug === document.location.pathname)
@@ -33,7 +46,7 @@ function App() {
     const [flip, setFlip] = useState(false)
     const pane = useRef()
 
-    function switchToTab(index) {
+    function switchToTab(index, pushState) {
         if (index === paneIndex || index === tabIndex) return
 
         console.info("switching to tab", index)
@@ -41,7 +54,8 @@ function App() {
         setRotation(rotation - 180)
         setTabIndex(index)
 
-        history.pushState(null, tabs[index].name, tabs[index].slug)
+        if (pushState)
+            history.pushState(null, tabs[index].name, tabs[index].slug)
 
         setTimeout(() => {
             setPaneIndex(index)
@@ -51,7 +65,7 @@ function App() {
 
     useEffect(() => {
         function listener() {
-            switchToTab(tabs.findIndex(tab => tab.slug === document.location.pathname))
+            switchToTab(tabs.findIndex(tab => tab.slug === window.location.pathname), false)
         }
 
         window.addEventListener("popstate", listener)
@@ -67,7 +81,7 @@ function App() {
                     key={tab.name}
                     className={clsx("tab", tab.color, { "inactive": index !== tabIndex })}
                     onClick={() => {
-                        switchToTab(index)
+                        switchToTab(index, true)
                     }}
                 >
                     {tab.name}
