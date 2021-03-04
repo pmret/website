@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { createPortal } from "react-dom"
-import { Area, XAxis, YAxis, AreaChart, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import { Area, XAxis, YAxis, AreaChart, CartesianGrid, Tooltip, ResponsiveContainer, Text } from "recharts"
 
 const csvVersions = {
     "1": {
@@ -129,6 +129,9 @@ function DataView({ data, captionPortal, nonce, color }) {
                         </AreaChart>
                     </ResponsiveContainer>
                 </div>
+                {latest && <div className="progress-percent" title="Latest matched percentage">
+                    {formatPercent(latest.percentBytes)}
+                </div>}
             </div>
 
             <button className={"shadow-box-title " + color}>
@@ -159,6 +162,10 @@ function formatTimestampMonth(timestamp) {
     }
 }
 
+function formatPercent(alpha) {
+    return Math.round(alpha * 100) / 100 + "%"
+}
+
 function EntryInfo({ entry, isLatest }) {
     /*const [commitMessage, setCommitMessage] = useState(null)
 
@@ -179,7 +186,7 @@ function EntryInfo({ entry, isLatest }) {
         <br/>
 
         <span className="thin">
-            Matched {Math.round(entry.percentBytes * 100) / 100}% bytes ({entry.matchingFuncs}/{entry.totalFuncs} functions)
+            Matched {formatPercent(entry.percentBytes)} bytes ({entry.matchingFuncs}/{entry.totalFuncs} functions)
         </span>
     </div>
 }

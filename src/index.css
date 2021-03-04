@@ -301,6 +301,7 @@ main > * {
     height: 100%;
 
     display: flex;
+    position: relative;
     overflow: hidden;
 
     background: white;
@@ -355,6 +356,16 @@ button.shadow-box-title {
 
     user-select: none;
     -webkit-user-select: none;
+}
+
+.progress-percent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: max(48px, 10vw);
+    color: rgba(0, 0, 0, 0.15);
 }
 
 .outline-invert {
