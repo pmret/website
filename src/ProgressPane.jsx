@@ -1,10 +1,6 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { createPortal } from "react-dom"
-import { Area, XAxis, YAxis, AreaChart, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-import { scalePow } from "d3-scale"
-
-const scale = scalePow()
-    .exponent(30)
+import { Area, XAxis, YAxis, AreaChart, CartesianGrid, Tooltip, ResponsiveContainer, Text } from "recharts"
 
 const csvVersions = {
     "1": {
@@ -45,7 +41,7 @@ async function fetchData(version) {
 
     const latest = rows[rows.length - 1]
     for (const row of rows) {
-         row.percentBytes = (row.matchingBytes / latest.totalBytes) * 100
+        row.percentBytes = (row.matchingBytes / latest.totalBytes) * 100
     }
 
     return rows
@@ -67,23 +63,16 @@ export default function ProgressPane({ captionPortal, nonce, color, version }) {
     </div>
 }
 
-const monthDates = []
-{
-    let date = new Date(2020, 3, 1)
-    while (date < Date.now()) {
-        monthDates.push(date / 1000)
-
-        date = new Date(date) // clone
-        date.setMonth(date.getMonth() + 1)
-    }
-}
-
 function DataView({ data, captionPortal, nonce, color }) {
     const latest = data[data.length - 1]
     const oldest = data[0]
     const { stroke, fill } = colors[color]
 
     const [selectedEntry, setSelectedEntry] = useState(latest)
+
+    if (!selectedEntry && latest) {
+        setSelectedEntry(latest)
+    }
 
     function renderTooltip(tip) {
         const entry = data.find(row => row.timestamp === tip.label)
@@ -97,13 +86,31 @@ function DataView({ data, captionPortal, nonce, color }) {
 
     const maxPercent = latest ? Math.ceil(latest.percentBytes / 25) * 25 : 25
 
+    const monthDates = useMemo(() => {
+        const monthDates = []
+
+        if (oldest) {
+            let date = new Date(oldest.timestamp * 1000)
+            date.setDate(0)
+
+            while (date < Date.now()) {
+                monthDates.push(date / 1000)
+
+                date = new Date(date) // clone
+                date.setMonth(date.getMonth() + 1)
+            }
+
+            return monthDates
+        }
+    }, [oldest && oldest.timestamp])
+
     return <>
         <div className="shadow-box flex-grow">
             <div className="shadow-box-inner" style={{ paddingRight: ".7em", paddingTop: ".7em", "--text-outline": "transparent", background: "#e2e1d8" }}>
                 <div className="progress-chart">
                     <ResponsiveContainer>
                         <AreaChart data={data}>
-                            <XAxis dataKey="timestamp" type="number" scale={scale} domain={["dataMin", Date.now()/1000]} ticks={monthDates} tickFormatter={formatTimestampMonth} interval={0}/>
+                            <XAxis dataKey="timestamp" type="number" scale="linear" domain={["dataMin", Date.now()/1000]} ticks={monthDates} tickFormatter={formatTimestampMonth}/>
                             <YAxis type="number" unit="%" domain={[0, maxPercent]} tickCount={maxPercent / 5 + 1}/>
 
                             <CartesianGrid stroke="#d9d0c9"/>
@@ -122,6 +129,9 @@ function DataView({ data, captionPortal, nonce, color }) {
                         </AreaChart>
                     </ResponsiveContainer>
                 </div>
+                {latest && <div className="progress-percent" title="Latest matched percentage">
+                    {formatPercent(latest.percentBytes)}
+                </div>}
             </div>
 
             <button className={"shadow-box-title " + color}>
@@ -144,15 +154,16 @@ function formatTimestamp(timestamp, options={}) {
 
 function formatTimestampMonth(timestamp) {
     const date = new Date(timestamp * 1000)
-    const [day, month, year] = new Intl.DateTimeFormat("en-GB", {
-        dateStyle: "medium",
-    }).format(date).split(" ")
 
-    if (month === "Jan") {
-        return year
+    if (date.getMonth() == 0) {
+        return date.getFullYear().toString()
+    } else {
+        return new Intl.DateTimeFormat([], { month: "short" }).format(date)
     }
+}
 
-    return month
+function formatPercent(alpha) {
+    return Math.round(alpha * 100) / 100 + "%"
 }
 
 function EntryInfo({ entry, isLatest }) {
@@ -170,17 +181,12 @@ function EntryInfo({ entry, isLatest }) {
         <a href={`https://github.com/pmret/papermario/commit/${entry.commit}`}>
             {entry.commit.substr(0, 8)}
         </a>
-        {isLatest && " (latest)"}
-        <table>
-            <tbody>
-                <tr>
-                    <td width="200">Matched</td>
-                    <td className="thin align-right">
-                        {Math.round(entry.percentBytes * 100) / 100}% bytes
-                        ({entry.matchingFuncs}/{entry.totalFuncs} functions)
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        {isLatest && " (latest commit)"}
+
+        <br/>
+
+        <span className="thin">
+            Matched {formatPercent(entry.percentBytes)} bytes ({entry.matchingFuncs}/{entry.totalFuncs} functions)
+        </span>
     </div>
 }

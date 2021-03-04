@@ -7,7 +7,8 @@ html {
     --dark: #313131;
     --light: #d6d6ce;
 
-    font-size: 32px;
+    font-size: 21px;
+    font-size: clamp(21px, 1.5vw, 32px);
     font-family: "Paper Mario Dialog Redesigned", sans-serif;
     font-weight: 700;
     line-height: 1.2;
@@ -32,6 +33,13 @@ body {
     background-repeat: repeat-x;
     background-size: contain;
     animation: clouds linear 30s infinite normal;
+
+    /* centre children */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1vw 1vh;
 }
 
 @keyframes clouds {
@@ -55,13 +63,13 @@ p {
     margin: 0;
 }
 
-a:any-link {
+a:any-link:not(.tab) {
     color: #3796ff;
     --text-outline: #d3e5f9;
     text-decoration: none;
 }
 
-button {
+button, .tab {
     all: unset;
 
     border-radius: 100em;
@@ -80,9 +88,11 @@ button {
 
     user-select: none;
     text-align: center;
+
+    color: var(--light);
 }
 
-button.red {
+button.red, .tab.red {
     border-top-color: #f04e54;
     border-left-color: #f04e54;
     background: #b4313e;
@@ -90,7 +100,7 @@ button.red {
     border-right-color: #7f1729;
 }
 
-button.yellow {
+button.yellow, .tab.yellow {
     border-top-color: #f0c74e;
     border-left-color: #f0c74e;
     background: #b48b31;
@@ -98,7 +108,7 @@ button.yellow {
     border-right-color: #7f5617;
 }
 
-button.blurple {
+button.blurple, .tab.blurple {
     border-top-color: #98a9e2;
     border-left-color: #98a9e2;
     background: #7289da;
@@ -106,7 +116,7 @@ button.blurple {
     border-right-color: #4E5D94;
 }
 
-button.github {
+button.github, .tab.github {
     border-top-color: #554e4e;
     border-left-color: #554e4e;
     background: #322f2f;
@@ -114,7 +124,7 @@ button.github {
     border-right-color: #171515;
 }
 
-button.teal {
+button.teal, .tab.teal {
     border-top-color: #22eec9;
     border-left-color: #22eec9;
     background: #14a98e;
@@ -122,7 +132,7 @@ button.teal {
     border-right-color: #076d5a;
 }
 
-button.green {
+button.green, .tab.green {
     border-top-color: #68ff51;
     border-left-color: #68ff51;
     background: #47b836;
@@ -130,11 +140,11 @@ button.green {
     border-right-color: #2a791e;
 }
 
-button.inactive {
+button.inactive, .tab.inactive {
     filter: brightness(0.6);
 }
 
-button:hover {
+button:hover, .tab:hover {
     filter: brightness(1.0);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
@@ -142,29 +152,40 @@ button:hover {
 .tab {
     margin-right: .25em;
     cursor: pointer;
+    display: inline-block;
 }
 
 #container {
-    /* TODO: use flex on body */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    width: 80%;
-    max-width: 95%;
-    height: 80%;
-    max-height: 950%;
+    width: 100%;
+    max-width: 1600px;
+    height: 100%;
+    max-height: 1100px;
+}
+
+@media (min-width: 2100px) {
+    #container {
+        max-width: 90%;
+        max-height: 90%;
+
+        width: max(80vw, calc(80vh * 16/11));
+        height: max(calc(80vw * 11/16), 80vh);
+    }
 }
 
 nav {
     margin-bottom: -.6em;
     z-index: 1;
-    width: 95%;
+    width: 100%;
+}
+
+@media (min-width: 600px) {
+    nav {
+        margin-left: 48px;
+    }
 }
 
 main {
@@ -193,6 +214,14 @@ main {
     transition: 600ms transform ease-in-out;
 
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 800px) {
+    main {
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+    }
 }
 
 main > :last-child {
@@ -251,6 +280,14 @@ main > * {
     position: relative;
 }
 
+@media (max-width: 800px) {
+    .shadow-box {
+        padding: .5em;
+        margin: .3em;
+        margin-bottom: .5em;
+    }
+}
+
 .shadow-box-inner {
     border-radius: 12px;
     box-shadow: inset .4em .4em rgba(0, 0, 0, 0.15);
@@ -264,6 +301,7 @@ main > * {
     height: 100%;
 
     display: flex;
+    position: relative;
     overflow: hidden;
 
     background: white;
@@ -275,7 +313,8 @@ button.shadow-box-title {
     bottom: -1em;
     transform: translateX(-50%);
 
-    width: 60%;
+    width: 90%;
+    max-width: 600px;
 
     text-align: center;
 
@@ -300,7 +339,7 @@ button.shadow-box-title {
 
     border-radius: 1rem;
     width: 85%;
-    height: 4rem;
+    min-height: 4rem;
 
     padding: .5em 1em;
     margin-top: -2em;
@@ -312,11 +351,21 @@ button.shadow-box-title {
 .progress-chart {
     flex: 1;
 
-    font-size: 18px;
+    font-size: 14px;
     overflow: hidden;
 
     user-select: none;
     -webkit-user-select: none;
+}
+
+.progress-percent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: max(48px, 10vw);
+    color: rgba(0, 0, 0, 0.15);
 }
 
 .outline-invert {

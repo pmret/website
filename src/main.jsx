@@ -77,22 +77,27 @@ function App() {
     return <>
         <nav>
             {tabs.map((tab, index) => {
-                return <button
+                return <a
                     key={tab.name}
                     className={clsx("tab", tab.color, { "inactive": index !== tabIndex })}
-                    onClick={() => {
-                        switchToTab(index, true)
+                    href={tab.slug}
+                    onClick={evt => {
+                        const q = window.matchMedia("(prefers-reduced-motion: reduce)")
+                        if (!q.matches) {
+                            switchToTab(index, true)
+                            evt.preventDefault()
+                        }
                     }}
                 >
                     {tab.name}
-                </button>
+                </a>
             })}
-            <button className="tab blurple inactive" onClick={() => window.open("https://discord.gg/urUm3VG")}>
+            <a className="tab blurple inactive" href="https://discord.gg/urUm3VG">
                 Discord
-            </button>
-            <button className="tab github inactive" onClick={() => window.open("https://github.com/pmret/papermario")}>
+            </a>
+            <a className="tab github inactive" href="https://github.com/pmret/papermario">
                 GitHub
-            </button>
+            </a>
         </nav>
         <main id="main" ref={pane} className={clsx(tabs[paneIndex].color)} style={{
             transform: `perspective(4000px) rotateX(${rotation}deg)`,
