@@ -48,18 +48,21 @@ async function fetchData(version) {
 }
 
 export default function ProgressPane({ captionPortal, nonce, color, version }) {
-    const [data, setData] = useState([])
+    const [data, setData] = useState()
+    const [dataVersion, setDataVersion] = useState()
 
     useEffect(() => {
         fetchData(version)
             .then(data => {
                 setData(data)
+                setDataVersion(version)
             })
     }, [version])
 
+    const isDataValid = dataVersion === version
+
     return <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-        {data && <DataView data={data} nonce={nonce} captionPortal={captionPortal} color={color}/>}
-        {!data && "Loading..."}
+        {<DataView data={isDataValid ? data : []} nonce={nonce} captionPortal={captionPortal} color={color}/>}
     </div>
 }
 
@@ -142,7 +145,7 @@ function DataView({ data, captionPortal, nonce, color }) {
             </button>
         </div>
 
-        {selectedEntry && captionPortal.current && createPortal(<EntryInfo entry={selectedEntry} isLatest={selectedEntry.commit === latest.commit}/>, captionPortal.current)}
+        {data.length && selectedEntry && captionPortal.current && createPortal(<EntryInfo entry={selectedEntry} isLatest={selectedEntry.commit === latest.commit}/>, captionPortal.current)}
     </>
 }
 
