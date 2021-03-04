@@ -144,15 +144,12 @@ function formatTimestamp(timestamp, options={}) {
 
 function formatTimestampMonth(timestamp) {
     const date = new Date(timestamp * 1000)
-    const [day, month, year] = new Intl.DateTimeFormat("en-GB", {
-        dateStyle: "medium",
-    }).format(date).split(" ")
 
-    if (month === "Jan") {
-        return year
+    if (date.getMonth() == 0) {
+        return date.getFullYear().toString()
+    } else {
+        return new Intl.DateTimeFormat([], { month: "short" }).format(date)
     }
-
-    return month
 }
 
 function EntryInfo({ entry, isLatest }) {
