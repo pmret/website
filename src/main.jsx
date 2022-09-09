@@ -132,6 +132,7 @@ function App() {
                 return <a
                     key={tab.name}
                     className={clsx("tab", tab.color, { "inactive": index !== tabIndex })}
+                    aria-selected={index === tabIndex}
                     href={tab.slug}
                     onClick={evt => {
                         const q = window.matchMedia("(prefers-reduced-motion: reduce)")

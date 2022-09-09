@@ -108,6 +108,9 @@ function DataView({ data, captionPortal, nonce, color }) {
     }, [oldest && oldest.timestamp])
 
     return <>
+        <h1 className="aria-only">
+            {latest && formatPercent(latest.percentBytes)} decompiled
+        </h1>
         <div className="shadow-box flex-grow">
             <div className="shadow-box-inner" style={{ paddingRight: ".7em", paddingTop: ".7em", "--text-outline": "transparent", background: "#e2e1d8" }}>
                 <div className="progress-chart">
@@ -137,7 +140,7 @@ function DataView({ data, captionPortal, nonce, color }) {
                 </div>}
             </div>
 
-            <button className={"shadow-box-title " + color}>
+            <button aria-hidden={true} className={"shadow-box-title " + color}>
                 {selectedEntry ? formatTimestamp(selectedEntry.timestamp, {
                     dateStyle: "long",
                     timeStyle: "short",
