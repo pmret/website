@@ -27,7 +27,7 @@ const tabs = [
                     <li>Learning more about how the game was engineered</li>
                     <li>Helping speedrunners and glitch-hunters understand why bugs occur</li>
                     <li>Making engine mods easier to create</li>
-                    <li>Because its a fun puzzle</li>
+                    <li>Because it's a fun puzzle</li>
                 </ul>
 
                 <h3>How completed is it?</h3>
