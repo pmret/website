@@ -181,7 +181,7 @@ function App() {
                 {tabs[paneIndex].pane({ captionPortal, nonce: rotation })}
             </div>
         </main>
-        <div className="caption outline-invert" ref={captionPortal}></div>
+        {tabIndex !== 0 && <div className="caption outline-invert" ref={captionPortal}></div>}
     </>
 }
 
