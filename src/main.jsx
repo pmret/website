@@ -3,7 +3,6 @@ import ReactDOM from "react-dom"
 import clsx from "clsx"
 
 import ProgressPane from "./ProgressPane"
-import Contributors from "./Contributors"
 
 const tabs = [
     {
@@ -19,20 +18,18 @@ const tabs = [
 
                 <h3>Why?</h3>
                 <p>
-                    Different contributors have their own reasons for decompiling Paper Mario.<br/>
-                    These include:
+                    Different contributors have their own reasons for decompiling Paper Mario. These include:
                 </p>
                 <ul>
                     <li>Preserving the game</li>
                     <li>Learning more about how the game was engineered</li>
                     <li>Helping speedrunners and glitch-hunters understand why bugs occur</li>
                     <li>Making engine mods easier to create</li>
-                    <li>Because it's a fun puzzle</li>
+                    <li>Enjoying decompilation in and of itself</li>
                 </ul>
-
                 <h3>How completed is it?</h3>
                 <p>
-                    We are currently focusing on decompiling the US release of the game, because it is the version that has had the most reverse-engineering work put into it. JP is supported as a proof-of-concept, while EU will come later.
+                    We are currently focusing on decompiling the US release of the game, because it is the version that has had the most reverse-engineering work put into it. The Japanese version has preliminary support, and focus will move to that once US is done.
                 </p>
                 <p>
                     <a href="/progress-us">View the progress chart ›</a>
@@ -40,26 +37,53 @@ const tabs = [
             </div>
 
             <div className="prose-col">
-                <h3>Would a PC port be possible?</h3>
+                <h3>You're so close to the finish line!</h3>
                 <p>
-                    Yes! Eventually.
+                    It's been an incredible journey so far. Although our progress graph shows that we are almost done, there are a few caveats that should be mentioned:
                 </p>
+                <ul>
+                    <li>Progress will not increase at a constant rate. Plenty of factors influence how fast the number changes, including the availability of contributors, difficulty of remaining functions, and other various issues we may come across.</li>
+                    <li>The progress graph is only one way of measuring one aspect of the project's completion. There are <a href="#other-ways">other ways</a> of tracking decompilation progress, and there are plenty of other <a href="#aspects">aspects</a> of the project that can be looked at as a way of gauging completion. We are much further ahead in some areas than others, and most are not easy to quantitatively track.</li>
+                </ul>
+
+                <h3 id="other-ways">What other ways of tracking decompilation progress exist?</h3>
                 <p>
-                    Completed decompilations, such as <a href="https://github.com/n64decomp/sm64">sm64</a>, have enjoyed efforts to port the game to other platforms. For papermario, a PC port is largely infeasible until much much more of the game's code is decompiled.
+                    One could consider functions for which there is an equivalent (but non-matching) decompilation. This is a common metric used by these sorts of projects. If our project were to use this metric, it would probably add 1 or 2 percentage points to the total.
+                </p>
+
+                <h3 id="aspects">What other aspects of the project can be looked at as a way of gauging completion?</h3>
+                <p>
+                    In addition to the percentage of decompiled code, there are a few other things that one could measure:
+                </p>
+                <ul>
+                    <li>Assets: Conversion of game assets into modern formats that can be easily read/modified by modern tooling</li>
+                    <li>Data: Making sure game data is represented in ways that makes it easy to understand and modify</li>
+                    <li>Codebase modernization: Updating the codebase in ways that preserves matching behavior while allowing it to be built with modern tools</li>
+                    <li>Documentation: Describing how pieces of the game work, on a micro and macro scale</li>
+                    <li>Shiftability: See below</li>
+                </ul>
+
+                <h3 id="shiftability">What is "shiftability"?</h3>
+                <p>
+                    When we say a project is "shiftable", we mean that code can be inserted and removed without breaking the game. By virtue of how these projects are created, they unfortunately contain a number of hard-coded addresses that have not been converted into references. For a matching build of the project, these hard-coded addreses point to the correct places, resulting in a 1:1 equivalent final binary. This comes back to bite us when we try to modify the project, changing the size of a piece of code or data. In this case, any hard-coded address will continue pointing to the same place, which may be in the middle of some other piece of code or even data. Jumping into invalid code or data causes game to crash. We are currently moving toward shiftability, but it's a slow and tedious process.
+                </p>
+            </div>
+
+            <div className="prose-col">
+                <h3>PC Port?</h3>
+                <p>
+                    There are still many things preventing the possibility of a PC port. Among them, we need a decompiled equivalent for every function in the game, full <a href="#shiftability">shiftability</a>, and much more developed asset support.
                 </p>
 
                 <h3>Can I make mods with this?</h3>
                 <p>
-                    It's possible, but its not recommended unless you know what you're doing, and really need to be able to make sweeping changes to the core game engine. The Star Rod modding tool is very powerful and allows for quite a lot of flexibility. If you do decide to attempt to use papermario as a base for your mod, Star Rod can be used to view and edit most assets with ease.
-                </p>
-                <p>
-                    Currently, papermario is not <a href="https://github.com/pmret/papermario/issues/367">shiftable</a>. In making changes to the source code, data and functions must not be changed in a way that makes them compile to a larger binary, or the game will crash. This makes modding a lot more difficult that it would be if the game was shiftable.
+                    Because the project is not yet <a href="#shiftability">shiftable</a>, trying to use it for modding is not recommended. For now, we recommend using the Star Rod modding tool.
                 </p>
                 <p>
                     <a href="https://discord.gg/urUm3VG">Join the modding Discord server ›</a>
                 </p>
 
-                <h3>How can I help?</h3>
+                <h3>How can I help contribute?</h3>
                 <p>
                     <a href="https://github.com/pmret/papermario/blob/master/INSTALL.md">Setup instructions ›</a><br/>
                     <a href="https://github.com/pmret/papermario/blob/master/CONTRIBUTING.md">Decompilation tutorial ›</a><br/>
@@ -80,12 +104,6 @@ const tabs = [
         color: "green",
         pane: (props) => <ProgressPane version="jp" color="green" {...props}/>
     },
-    /*{
-        slug: "/contributors",
-        name: "Contributors",
-        color: "teal",
-        pane: (props) => <Contributors {...props}/>
-    },*/
 ]
 
 let routedTabIndex = tabs.findIndex(tab => tab.slug === document.location.pathname)
