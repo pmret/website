@@ -116,21 +116,20 @@ function App() {
     const [flip, setFlip] = useState(false)
     const pane = useRef()
 
-    function switchToTab(index, pushState) {
+    function switchToTab(index, pushState, prevTabIndex) {
         if (index === paneIndex || index === tabIndex) return
-
-        console.info("switching to tab", index)
-
         setRotation(rotation - 180)
-        setTabIndex(index)
+
+        console.info("switching to tab", index, "from ", prevTabIndex)
 
         if (pushState)
             history.pushState(null, tabs[index].name, tabs[index].slug)
 
         setTimeout(() => {
+            setTabIndex(index)
             setPaneIndex(index)
             setFlip(!flip)
-        }, 300) // half the animation time
+        }, prevTabIndex === 0 ? 175 : 300) // half the animation time
     }
 
     useEffect(() => {
@@ -155,7 +154,7 @@ function App() {
                     onClick={evt => {
                         const q = window.matchMedia("(prefers-reduced-motion: reduce)")
                         if (!q.matches) {
-                            switchToTab(index, true)
+                            switchToTab(index, true, tabIndex)
                             evt.preventDefault()
                         }
                     }}
@@ -172,13 +171,14 @@ function App() {
         </nav>
         <main id="main" ref={pane} className={clsx(tabs[paneIndex].color)} style={{
             transform: `perspective(4000px) rotateX(${rotation}deg)`,
+            overflow: 'hidden'
         }}>
             <div style={{
                 display: "flex",
                 flex: 1,
                 transform: `rotateX(${flip ? '180deg' : '0deg'})`,
             }}>
-                {tabs[paneIndex].pane({ captionPortal, nonce: rotation })}
+                {tabs[paneIndex].pane({ captionPortal })}
             </div>
         </main>
         {tabIndex !== 0 && <div className="caption outline-invert" ref={captionPortal}></div>}

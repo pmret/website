@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { createPortal } from "react-dom"
-import { Area, XAxis, YAxis, AreaChart, CartesianGrid, Tooltip, ResponsiveContainer, Text } from "recharts"
+import { Area, XAxis, YAxis, AreaChart, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 
 const csvVersions = {
     "1": {
@@ -47,7 +47,7 @@ async function fetchData(version) {
     return rows
 }
 
-export default function ProgressPane({ captionPortal, nonce, color, version }) {
+export default function ProgressPane({ captionPortal, color, version }) {
     const [data, setData] = useState()
     const [dataVersion, setDataVersion] = useState()
 
@@ -62,11 +62,11 @@ export default function ProgressPane({ captionPortal, nonce, color, version }) {
     const isDataValid = dataVersion === version
 
     return <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-        {<DataView data={isDataValid ? data : []} nonce={nonce} captionPortal={captionPortal} color={color}/>}
+        {data && <DataView data={isDataValid ? data : []} captionPortal={captionPortal} color={color}/>}
     </div>
 }
 
-function DataView({ data, captionPortal, nonce, color }) {
+function DataView({ data, captionPortal, color }) {
     const latest = data[data.length - 1]
     const oldest = data[0]
     const { stroke, fill } = colors[color]
@@ -148,7 +148,7 @@ function DataView({ data, captionPortal, nonce, color }) {
             </button>
         </div>
 
-        {data.length && selectedEntry && captionPortal.current && createPortal(<EntryInfo entry={selectedEntry} isLatest={selectedEntry.commit === latest.commit}/>, captionPortal.current)}
+        {(data.length && selectedEntry && captionPortal.current && createPortal(<EntryInfo entry={selectedEntry} isLatest={selectedEntry.commit === latest.commit}/>, captionPortal.current) || null)}
     </>
 }
 
