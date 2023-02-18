@@ -40,8 +40,15 @@ async function fetchData(version) {
         })
 
     const latest = rows[rows.length - 1]
+
+    let totalBytes = latest.totalBytes
+    // TODO hack for JP since we haven't mapped all the segments
+    if (version !== "us") {
+        totalBytes = 3718668
+    }
+
     for (const row of rows) {
-        row.percentBytes = (row.matchingBytes / latest.totalBytes) * 100
+        row.percentBytes = (row.matchingBytes / totalBytes) * 100
     }
 
     return rows
