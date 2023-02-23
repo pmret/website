@@ -171,7 +171,6 @@ function App() {
         </nav>
         <main id="main" ref={pane} className={clsx(tabs[paneIndex].color)} style={{
             transform: `perspective(4000px) rotateX(${rotation}deg)`,
-            overflow: 'hidden'
         }}>
             <div style={{
                 display: "flex",
