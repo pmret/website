@@ -139,8 +139,24 @@ button.green, .tab.green {
     border-right-color: #2a791e;
 }
 
+button.blue, .tab.blue {
+    border-top-color: #51eeff;
+    border-left-color: #51eeff;
+    background: #00b3ff;
+    border-bottom-color: #0050c9;
+    border-right-color: #0050c9;
+}
+
+button.orange, .tab.orange {
+    border-top-color: #ffa66f;
+    border-left-color: #ffa66f;
+    background: #ff6f00;
+    border-bottom-color: #894701;
+    border-right-color: #894701;
+}
+
 button.inactive, .tab.inactive {
-    filter: brightness(0.6);
+    filter: brightness(0.7);
 }
 
 button:hover, .tab:hover {
@@ -245,6 +261,16 @@ main.teal {
 main.green {
     background-color: #68ff51;
     background-image: url(bg/green-checker.png);
+}
+
+main.blue {
+    background-color: #518bff;
+    background-image: url(bg/teal-checker.png);
+}
+
+main.orange {
+    background-color: #ffd651;
+    background-image: url(bg/yellow-checker.png);
 }
 
 main > * {

@@ -29,7 +29,7 @@ const tabs = [
                 </ul>
                 <h3>How completed is it?</h3>
                 <p>
-                    We are currently focusing on decompiling the US release of the game, because it is the version that has had the most reverse-engineering work put into it. The Japanese version has preliminary support, and focus will move to that once US is done.
+                    We are currently focusing on decompiling the US release of the game, because it is the version that has had the most reverse-engineering work put into it. Other versions have preliminary support, and focus will move to those once US is done.
                 </p>
                 <p>
                     <a href="/progress-us">View the progress chart ›</a>
@@ -93,16 +93,28 @@ const tabs = [
         </div>
     },
     {
+        slug: "/progress-jp",
+        name: "Progress (JP)",
+        color: "green",
+        pane: (props) => <ProgressPane version="jp" color="green" {...props}/>
+    },
+    {
         slug: "/progress-us",
         name: "Progress (US)",
         color: "yellow",
         pane: (props) => <ProgressPane version="us" color="yellow" {...props}/>
     },
     {
-        slug: "/progress-jp",
-        name: "Progress (JP)",
-        color: "green",
-        pane: (props) => <ProgressPane version="jp" color="green" {...props}/>
+        slug: "/progress-pal",
+        name: "Progress (PAL)",
+        color: "blue",
+        pane: (props) => <ProgressPane version="pal" color="blue" {...props}/>
+    },
+    {
+        slug: "/progress-ique",
+        name: "Progress (iQue)",
+        color: "orange",
+        pane: (props) => <ProgressPane version="ique" color="orange" {...props}/>
     },
 ]
 
