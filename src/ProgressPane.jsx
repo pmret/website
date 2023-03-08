@@ -16,8 +16,10 @@ const csvVersions = {
 }
 
 const colors = {
-    yellow: { stroke: "#e3ac34", fill: "#edc97e" },
     green: { stroke: "#40e334", fill: "#91eb7f" },
+    yellow: { stroke: "#e3ac34", fill: "#edc97e" },
+    blue: { stroke: "#3d76da", fill: "#1e3b6d" },
+    orange: { stroke: "#cc8400", fill: "#ffa500" },
 }
 
 async function fetchData(version) {
