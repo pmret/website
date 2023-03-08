@@ -365,6 +365,8 @@ button.shadow-box-title {
 
     font-size: max(48px, 10vw);
     color: rgba(0, 0, 0, 0.15);
+
+    pointer-events: none;
 }
 
 .outline-invert {

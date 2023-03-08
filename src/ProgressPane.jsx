@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo, useRef } from "react"
 import { createPortal } from "react-dom"
-import { Area, XAxis, YAxis, AreaChart, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import Uplot from "uplot"
+import 'uplot/dist/uPlot.min.css'
 
 const csvVersions = {
     "1": {
@@ -71,7 +72,6 @@ export default function ProgressPane({ captionPortal, color, version }) {
 
 function DataView({ data, captionPortal, color }) {
     const latest = data[data.length - 1]
-    const oldest = data[0]
     const { stroke, fill } = colors[color]
 
     const [selectedEntry, setSelectedEntry] = useState(latest)
@@ -80,64 +80,85 @@ function DataView({ data, captionPortal, color }) {
         setSelectedEntry(latest)
     }
 
-    function renderTooltip(tip) {
-        const entry = data.find(row => row.timestamp === tip.label)
+    const uplotData = useMemo(() => {
+        const uplotData = [
+            [], // x-axis (timestamps)
+            [], // y-axis (percentages)
+        ]
 
-        if (entry) {
-            setSelectedEntry(entry)
+        for (const row of data) {
+            uplotData[0].push(row.timestamp)
+            uplotData[1].push(row.percentBytes)
         }
 
-        return <span/>
-    }
+        return uplotData
+    })
+    const uplotEl = useRef()
+    useEffect(() => {
+        if (uplotEl.current && uplotData.length) {
+            const { width, height } = uplotEl.current.getBoundingClientRect()
+            const uplot = new Uplot({
+                width,
+                height,
+                series: [
+                    {},
+                    {
+                        scale: "%",
+                        value: (u, v) => v == null ? null : v.toFixed(1) + "%",
+                        stroke,
+                        fill,
+                        width: 3/devicePixelRatio,
+                    },
+                ],
+                axes: [
+                    {},
+                    {
+                        scale: "%",
+                        values: (u, vals, space) => vals.map(v => +v.toFixed(1) + "%"),
+                    },
+                ],
+                legend: {
+                    show: false,
+                },
+                plugins: [
+                    {
+                        hooks: {
+                            setCursor: u => {
+                                const idx = u.cursor.idx
+                                if (typeof idx === "number") {
+                                    setSelectedEntry(data[idx])
+                                }
+                            },
+                        }
+                    }
+                ]
+            }, uplotData, uplotEl.current)
 
-    const maxPercent = latest ? Math.ceil(latest.percentBytes / 25) * 25 : 25
-
-    const monthDates = useMemo(() => {
-        const monthDates = []
-
-        if (oldest) {
-            let date = new Date(oldest.timestamp * 1000)
-            date.setDate(0)
-
-            while (date < Date.now()) {
-                monthDates.push(date / 1000)
-
-                date = new Date(date) // clone
-                date.setMonth(date.getMonth() + 1)
+            // Resize the chart when the window is resized
+            function onResize() {
+                const { width, height } = uplotEl.current.getBoundingClientRect()
+                uplot.setSize({ width, height })
             }
+            document.addEventListener("resize", onResize)
 
-            return monthDates
+            // Hack to make sure the chart is sized correctly after the flip transition when changing page
+            const t = setTimeout(onResize, 300)
+
+            return () => {
+                uplot.destroy()
+                document.removeEventListener("resize", onResize)
+                clearTimeout(t)
+            }
         }
-    }, [oldest && oldest.timestamp])
+    }, [uplotData, uplotEl.current, stroke])
 
     return <>
         <h1 className="aria-only">
             {latest && formatPercent(latest.percentBytes)} decompiled
         </h1>
         <div className="shadow-box flex-grow">
-            <div className="shadow-box-inner" style={{ paddingRight: ".7em", paddingTop: ".7em", "--text-outline": "transparent", background: "#e2e1d8" }}>
-                <div className="progress-chart">
-                    <ResponsiveContainer>
-                        <AreaChart data={data}>
-                            <XAxis dataKey="timestamp" type="number" scale="linear" domain={["dataMin", Date.now()/1000]} ticks={monthDates} tickFormatter={formatTimestampMonth}/>
-                            <YAxis type="number" unit="%" domain={[0, maxPercent]} tickCount={maxPercent / 5 + 1}/>
-
-                            <CartesianGrid stroke="#d9d0c9"/>
-
-                            <Area
-                                type="linear"
-                                dataKey="percentBytes"
-                                unit="%"
-                                stroke={stroke} strokeWidth={2}
-                                fill={fill}
-                                dot={true}
-                                isAnimationActive={false}
-                            />
-
-                            <Tooltip content={renderTooltip}/>
-                        </AreaChart>
-                    </ResponsiveContainer>
-                </div>
+            <div className="shadow-box-inner" style={{ padding: ".7em", "--text-outline": "transparent", background: "#e2e1d8" }}>
+                <div className="progress-chart" ref={uplotEl} />
                 {latest && <div className="progress-percent" title="Latest matched percentage">
                     {formatPercent(latest.percentBytes)}
                 </div>}
