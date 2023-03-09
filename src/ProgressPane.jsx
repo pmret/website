@@ -119,6 +119,11 @@ function DataView({ data, captionPortal, color }) {
                         values: (u, vals, space) => vals.map(v => +v.toFixed(1) + "%"),
                     },
                 ],
+                scales: {
+                    "%": {
+                        range: [0, 100],
+                    }
+                },
                 legend: {
                     show: false,
                 },
