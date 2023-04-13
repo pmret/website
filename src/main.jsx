@@ -13,7 +13,7 @@ const tabs = [
             <div className="prose-col">
                 <h3>What is this?</h3>
                 <p>
-                    <a href="https://github.com/pmret/papermario">papermario</a> is an ongoing project to reverse-engineer the sourcecode for <a href="https://wikipedia.org/wiki/Paper_Mario_(video_game)">Paper Mario</a> on the Nintendo 64. The game's assembly code is manually decompiled into C source code. We also split out assets (such as backgrounds, sprites, maps, and text) from an original game copy into more modern formats. The C code and assets can then be <i>recompiled</i> to create a 1-to-1 ("matching") copy of the game.
+                    <a href="https://github.com/pmret/papermario">papermario</a> is an ongoing project to reverse-engineer the source code for <a href="https://wikipedia.org/wiki/Paper_Mario_(video_game)">Paper Mario</a> on the Nintendo 64. The game's assembly code is manually decompiled into C source code. The project also extracts game assets (such as backgrounds, sprites, maps, and text) from an original game copy into more modern formats. The C code and assets can then be <i>recompiled</i> to create a 1-to-1 ("matching") copy of the game.
                 </p>
 
                 <h3>Why?</h3>
@@ -48,7 +48,7 @@ const tabs = [
 
                 <h3 id="other-ways">What other ways of tracking decompilation progress exist?</h3>
                 <p>
-                    One could consider functions for which there is an equivalent (but non-matching) decompilation. This is a common metric used by these sorts of projects. If our project were to use this metric, it would probably add 1 or 2 percentage points to the total.
+                    One could consider functions for which there is an equivalent (but non-matching) decompilation. This is a common metric used by these sorts of projects. We could also consider portions of functions rather than entire functions. The way we choose to measure progress is merely by the number of fully-decompiled functions that are byte-equivalent to the original game. This is the most straightforward way to measure progress, and most decompilation projects use this same metric.
                 </p>
 
                 <h3 id="aspects">What other aspects of the project can be looked at as a way of gauging completion?</h3>
@@ -58,36 +58,33 @@ const tabs = [
                 <ul>
                     <li>Assets: Conversion of game assets into modern formats that can be easily read/modified by modern tooling</li>
                     <li>Data: Making sure game data is represented in ways that makes it easy to understand and modify</li>
-                    <li>Codebase modernization: Updating the codebase in ways that preserves matching behavior while allowing it to be built with modern tools</li>
-                    <li>Documentation: Describing how pieces of the game work, on a micro and macro scale</li>
-                    <li>Shiftability: See below</li>
+                    <li>Codebase modernization: Updating the codebase so it can be built with modern tools</li>
+                    <li>Documentation: Describing how pieces of the game work and naming functions and variables</li>
                 </ul>
-
-                <h3 id="shiftability">What is "shiftability"?</h3>
-                <p>
-                    When we say a project is "shiftable", we mean that code can be inserted and removed without breaking the game. By virtue of how these projects are created, they unfortunately contain a number of hard-coded addresses that have not been converted into references. For a matching build of the project, these hard-coded addreses point to the correct places, resulting in a 1:1 equivalent final binary. This comes back to bite us when we try to modify the project, changing the size of a piece of code or data. In this case, any hard-coded address will continue pointing to the same place, which may be in the middle of some other piece of code or even data. Jumping into invalid code or data causes game to crash. We are currently moving toward shiftability, but it's a slow and tedious process.
-                </p>
             </div>
 
             <div className="prose-col">
                 <h3>PC Port?</h3>
                 <p>
-                    There are still many things preventing the possibility of a PC port. Among them, we need a decompiled equivalent for every function in the game, full <a href="#shiftability">shiftability</a>, and much more developed asset support.
+                    There is still work to be done before work can be started on a PC port. Among the remaining tasks, we need a decompiled equivalent for every function in the game and full extraction / rebuilding support for all game assets.
                 </p>
 
                 <h3>Can I make mods with this?</h3>
                 <p>
-                    Because the project is not yet <a href="#shiftability">shiftable</a>, trying to use it for modding is not recommended. For now, we recommend using the Star Rod modding tool.
-                </p>
-                <p>
-                    <a href="https://discord.gg/urUm3VG">Join the modding Discord server ›</a>
+                    Yes. However, we're still working out issues with modding support, so please bear with us. Although the main repo is suitable for modding, Alex has started a fork of the main decomp repo, <a href="https://github.com/nanaian/papermario-dx">papermario-dx</a>, which aims to provide a more convenient base for creating mods.
                 </p>
 
                 <h3>How can I help contribute?</h3>
                 <p>
-                    <a href="https://github.com/pmret/papermario/blob/master/INSTALL.md">Setup instructions ›</a><br/>
-                    <a href="https://github.com/pmret/papermario/blob/master/CONTRIBUTING.md">Decompilation tutorial ›</a><br/>
+                    The remaining functions to be matched on the US version of the game are extremely difficult and not really suitable for beginners. That being said, there plenty of other ways to get involved, not limited to helping with asset support, documentation, and code cleanup. Please feel free to get involved!
+                </p>
+                <p>
+                    <a href="https://github.com/pmret/papermario/blob/main/INSTALL.md">Setup instructions ›</a><br/>
                     <a href="https://github.com/pmret/papermario/issues">Github issues ›</a>
+                </p>
+                <p>
+                    For modding resources and discussion of the project, please <br/>
+                    <a href="https://discord.gg/urUm3VG">Join our Discord server › </a>
                 </p>
             </div>
         </div>
