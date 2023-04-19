@@ -25,9 +25,10 @@ html {
 }
 
 body {
-    height: 100vh;
+    height: 100%;
+    min-height: 100vh;
     margin: 0;
-    padding: 1vw 1vh;
+    padding: 0;
     overflow: hidden;
 
     background-image: url(bg/mrn-clouds.png);
@@ -37,6 +38,7 @@ body {
 
     /* centre children */
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
@@ -179,6 +181,9 @@ button:hover, .tab:hover {
     max-width: 1600px;
     height: 100%;
     max-height: 1100px;
+    flex-grow: 1;
+
+    padding: 1vw 1vh;
 }
 
 @media (min-width: 2100px) {
@@ -466,4 +471,26 @@ button.shadow-box-title {
     width: 1px;
     height: 1px;
     overflow: hidden;
+}
+
+#banner {
+    width: 100%;
+    min-height: 6em;
+
+    color: white;
+    background-color: #518bff;
+    background-image: url(bg/red-checker.png);
+
+    padding: 0.5em;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/* hide mobile */
+@media (max-width: 800px) {
+    #banner {
+        display: none;
+    }
 }

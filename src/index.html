@@ -12,6 +12,29 @@
     </head>
 
     <body>
+        <div id="banner">
+            <img src="100.png" alt="Paper Mario logo modified to say 'Decomp 100%!'"/>
+            <div>
+                <b>We have reached 100% on the US release!</b><br />
+                Paper Mario is the 3rd N64-exclusive game to be fully decompiled (after SM64 and OOT).</br >
+                The team is immensely grateful to all contributors and supporters - thank you!<br />
+            </div>
+            <button id="close-banner" class="red">Dismiss</button>
+        </div>
         <div id="container"></div>
+
+        <script>
+            // Banner close button handler
+            const banner = document.getElementById("banner")
+            console.log(localStorage["100bannerclosed"])
+            if (localStorage["100bannerclosed"]) {
+                banner.remove()
+            } else {
+                document.getElementById("close-banner").addEventListener("click", () => {
+                    banner.remove()
+                    localStorage["100bannerclosed"] = true
+                })
+            }
+        </script>
     </body>
 </html>
