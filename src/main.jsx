@@ -29,7 +29,7 @@ const tabs = [
                 </ul>
                 <h3>How completed is it?</h3>
                 <p>
-                    We are currently focusing on decompiling the US release of the game, because it is the version that has had the most reverse-engineering work put into it. Other versions have preliminary support, and focus will move to those once US is done.
+                    We've reached 100% with the US version of the game. We are currently working on full support for the remaining versions of the game, asset support, and more.
                 </p>
                 <p>
                     <a href="/progress-us">View the progress chart ›</a>
@@ -37,36 +37,27 @@ const tabs = [
             </div>
 
             <div className="prose-col">
-                <h3>You're so close to the finish line!</h3>
+                <h3>You've reached 100%! Congratulations!</h3>
                 <p>
-                    It's been an incredible journey so far. Although our progress graph shows that we are almost done, there are a few caveats that should be mentioned:
-                </p>
-                <ul>
-                    <li>Progress will not increase at a constant rate. Plenty of factors influence how fast the number changes, including the availability of contributors, difficulty of remaining functions, and other various issues we may come across.</li>
-                    <li>The progress graph is only one way of measuring one aspect of the project's completion. There are <a href="#other-ways">other ways</a> of tracking decompilation progress, and there are plenty of other <a href="#aspects">aspects</a> of the project that can be looked at as a way of gauging completion. We are much further ahead in some areas than others, and most are not easy to quantitatively track.</li>
-                </ul>
-
-                <h3 id="other-ways">What other ways of tracking decompilation progress exist?</h3>
-                <p>
-                    One could consider functions for which there is an equivalent (but non-matching) decompilation. This is a common metric used by these sorts of projects. We could also consider portions of functions rather than entire functions. The way we choose to measure progress is merely by the number of fully-decompiled functions that are byte-equivalent to the original game. This is the most straightforward way to measure progress, and most decompilation projects use this same metric.
+                    It's been an incredible journey so far. Although our progress graph shows 100%, this is only one way of measuring the progress of the project. We still have more work planned to make the project the best that it can be.
                 </p>
 
-                <h3 id="aspects">What other aspects of the project can be looked at as a way of gauging completion?</h3>
+                <h3 id="aspects">What other areas of the project still need work?</h3>
                 <p>
-                    In addition to the percentage of decompiled code, there are a few other things that one could measure:
+                    Although we have reached 100% on the US version, there are still many areas of the project that need work. These include:
                 </p>
                 <ul>
-                    <li>Assets: Conversion of game assets into modern formats that can be easily read/modified by modern tooling</li>
-                    <li>Data: Making sure game data is represented in ways that makes it easy to understand and modify</li>
-                    <li>Codebase modernization: Updating the codebase so it can be built with modern tools</li>
-                    <li>Documentation: Describing how pieces of the game work and naming functions and variables</li>
+                    <li>Assets: Although many assets are properly handled and are moddable, there are still a few assets that are not properly being extracted and rebuilt in a way that would allow for porting or modding efforts.</li>
+                    <li>Codebase modernization: We plan to add QOL features to the codebase so the code is as nice as it can be while still compiling to match the original assembly.</li>
+                    <li>Documentation: Many variables, functions, enum values, and more are not yet named or documented.</li>
+                    <li>Other versions: The remaining versions of the game have not yet been fully matched, and we plan to support all releases of the game.</li>
                 </ul>
             </div>
 
             <div className="prose-col">
                 <h3>PC Port?</h3>
                 <p>
-                    There is still work to be done before work can be started on a PC port. Among the remaining tasks, we need a decompiled equivalent for every function in the game and full extraction / rebuilding support for all game assets.
+                    There is still work to be done before work can be started on a PC port. The primary blocker is that some assets are still packaged as raw binary data, rather than being properly extracted and rebuilt. Now that we have reached 100% for the US version of the game, we will be focusing on support for the remaining assets.
                 </p>
 
                 <h3>Can I make mods with this?</h3>
@@ -76,7 +67,7 @@ const tabs = [
 
                 <h3>How can I help contribute?</h3>
                 <p>
-                    The remaining functions to be matched on the US version of the game are extremely difficult and not really suitable for beginners. That being said, there plenty of other ways to get involved, not limited to helping with asset support, documentation, and code cleanup. Please feel free to get involved!
+                    There plenty of ways to get involved, not limited to helping with asset support, documentation, and code cleanup. Please feel free to get involved!
                 </p>
                 <p>
                     <a href="https://github.com/pmret/papermario/blob/main/INSTALL.md">Setup instructions ›</a><br/>
