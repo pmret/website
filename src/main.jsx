@@ -162,7 +162,7 @@ function App() {
                     {tab.name}
                 </a>
             })}
-            <a className="tab blurple inactive" href="https://discord.gg/paper-mario-modding">
+            <a className="tab blurple inactive" href="https://starhaven.dev/discord">
                 Discord
             </a>
             <a className="tab github inactive" href="https://github.com/pmret/papermario">
