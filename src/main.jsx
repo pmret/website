@@ -74,8 +74,8 @@ const tabs = [
                     <a href="https://github.com/pmret/papermario/issues">Github issues ›</a>
                 </p>
                 <p>
-                    For modding resources and discussion of the project, please <br/>
-                    <a href="https://discord.gg/urUm3VG">Join our Discord server › </a>
+                    To get involved, please <br/>
+                    <a href="https://discord.gg/PgcMpQTzh5">Join our Discord server › </a>
                 </p>
             </div>
         </div>
@@ -162,7 +162,7 @@ function App() {
                     {tab.name}
                 </a>
             })}
-            <a className="tab blurple inactive" href="https://starhaven.dev/discord">
+            <a className="tab blurple inactive" href="https://discord.gg/PgcMpQTzh5">
                 Discord
             </a>
             <a className="tab github inactive" href="https://github.com/pmret/papermario">
