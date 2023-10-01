@@ -70,7 +70,7 @@ const tabs = [
                     There plenty of ways to get involved, not limited to helping with asset support, documentation, and code cleanup. Please feel free to get involved!
                 </p>
                 <p>
-                    <a href="https://github.com/pmret/papermario/blob/main/INSTALL.md">Setup instructions ›</a><br/>
+                    <a href="https://github.com/pmret/papermario/blob/main/SETUP.md">Setup instructions ›</a><br/>
                     <a href="https://github.com/pmret/papermario/issues">Github issues ›</a>
                 </p>
                 <p>
