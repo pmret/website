@@ -47,7 +47,7 @@ const tabs = [
                     Although we have reached 100% on the US version, there are still many areas of the project that need work. These include:
                 </p>
                 <ul>
-                    <li>Assets: Although many assets are properly handled and are moddable, there are still a few assets that are not properly being extracted and rebuilt in a way that would allow for porting or modding efforts.</li>
+                    <li>Assets: Although many assets are properly handled and are moddable, there are still a few assets that are not properly being extracted and rebuilt in a way that would allow for modding efforts.</li>
                     <li>Codebase modernization: We plan to add QOL features to the codebase so the code is as nice as it can be while still compiling to match the original assembly.</li>
                     <li>Documentation: Many variables, functions, enum values, and more are not yet named or documented.</li>
                     <li>Other versions: The remaining versions of the game have not yet been fully matched, and we plan to support all releases of the game.</li>
@@ -57,7 +57,8 @@ const tabs = [
             <div className="prose-col">
                 <h3>PC Port?</h3>
                 <p>
-                    There is still work to be done before work can be started on a PC port. The primary blocker is that some assets are still packaged as raw binary data, rather than being properly extracted and rebuilt. Now that we have reached 100% for the US version of the game, we will be focusing on support for the remaining assets.
+                    There's a lot of people interested in playing a PC port of Paper Mario. Unfortunately, making a port isn't our focus. Porting the game isn't why we made the decomp project, and it's not a motivating factor in delving into this game. 
+                    We have so many exciting goals for the project incloding decompiling other versions, making modding easier, and further understanding and documenting the codebase; making a port isn't really on our radar.
                 </p>
 
                 <h3>Can I make mods with this?</h3>
@@ -70,7 +71,7 @@ const tabs = [
                     There plenty of ways to get involved, not limited to helping with asset support, documentation, and code cleanup. Please feel free to get involved!
                 </p>
                 <p>
-                    <a href="https://github.com/pmret/papermario/blob/main/SETUP.md">Setup instructions ›</a><br/>
+                    <a href="https://github.com/pmret/papermario/blob/main/SETUP.md">Setup instructions›</a><br/>
                     <a href="https://github.com/pmret/papermario/issues">Github issues ›</a>
                 </p>
                 <p>
