@@ -58,7 +58,7 @@ const tabs = [
                 <h3>PC Port?</h3>
                 <p>
                     There's a lot of people interested in playing a PC port of Paper Mario. Unfortunately, making a port isn't our focus. Porting the game isn't why we made the decomp project, and it's not a motivating factor in delving into this game. 
-                    We have so many exciting goals for the project incloding decompiling other versions, making modding easier, and further understanding and documenting the codebase; making a port isn't really on our radar.
+                    We have so many exciting goals for the project including decompiling other versions, making modding easier, and further understanding and documenting the codebase; making a port isn't really on our radar.
                 </p>
 
                 <h3>Can I make mods with this?</h3>
