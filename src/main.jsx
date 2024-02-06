@@ -29,7 +29,7 @@ const tabs = [
                 </ul>
                 <h3>How completed is it?</h3>
                 <p>
-                    We've reached 100% with the US version of the game. We are currently working on full support for the remaining versions of the game, asset support, and more.
+                    We've reached 100% with the US and iQue Player versions of the game. We are currently working on full support for the remaining versions of the game, asset support, and more.
                 </p>
                 <p>
                     <a href="/progress-us">View the progress chart ›</a>
@@ -44,7 +44,7 @@ const tabs = [
 
                 <h3 id="aspects">What other areas of the project still need work?</h3>
                 <p>
-                    Although we have reached 100% on the US version, there are still many areas of the project that need work. These include:
+                    Although we have reached 100% on the US and iQue Player versions, there are still many areas of the project that need work. These include:
                 </p>
                 <ul>
                     <li>Assets: Although many assets are properly handled and are moddable, there are still a few assets that are not properly being extracted and rebuilt in a way that would allow for modding efforts.</li>
